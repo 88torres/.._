@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz aniversário, Nayara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#040109;
+      --bg2:#0b0315;
+      --card:#10061c;
+      --card2:#170a28;
+      --purple:#9c7cff;
+      --purple2:#cdbdff;
+      --white:#ffffff;
+      --muted:#efe9ff;
+      --border:rgba(156,124,255,0.22);
+      --shadow:0 24px 70px rgba(0,0,0,.58);
+      --radius:30px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,sans-serif;
+      min-height:100vh;
+      overflow-x:hidden;
+      overflow-y:auto;
+      color:var(--white);
+      background:
+        radial-gradient(circle at top, rgba(156,124,255,.18), transparent 20%),
+        radial-gradient(circle at bottom, rgba(156,124,255,.10), transparent 20%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 45%, #05020b 100%);
+    }
+
+    .stars,.magic-dust,.cinema-overlay{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+    .stars{z-index:0;overflow:hidden}
+    .magic-dust{z-index:1;overflow:hidden}
+
+    .star,.dust{
+      position:absolute;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .star{
+      width:2px;
+      height:2px;
+      box-shadow:0 0 10px rgba(255,255,255,.7);
+      animation:twinkle ease-in-out infinite;
+      opacity:.55;
+    }
+
+    .dust{
+      width:3px;
+      height:3px;
+      background:rgba(205,189,255,.9);
+      box-shadow:0 0 16px rgba(156,124,255,.35);
+      animation:floatDust linear forwards;
+      opacity:.0;
+    }
+
+    .app{
+      position:relative;
+      z-index:2;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .slider{
+      width:min(980px,100%);
+      position:relative;
+    }
+
+    .slide{
+      display:none;
+      opacity:0;
+      transform:translateY(30px) scale(.985);
+      transition:opacity .7s ease, transform .7s ease;
+    }
+
+    .slide.active{
+      display:block;
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--card),var(--card2));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow), 0 0 28px rgba(156,124,255,.06);
+      padding:42px 28px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      min-height:min(84vh,760px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at top, rgba(156,124,255,.16), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 35%);
+    }
+
+    .badge{
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid rgba(156,124,255,.35);
+      background:rgba(156,124,255,.12);
+      color:#fff;
+      font-weight:700;
+      font-size:.84rem;
+      margin-bottom:18px;
+    }
+
+    .name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(4rem,9vw,6rem);
+      color:var(--purple);
+      line-height:.95;
+      margin-bottom:10px;
+      text-shadow:0 0 16px rgba(156,124,255,.35),0 0 34px rgba(156,124,255,.18);
+      animation:nameGlow 2.8s ease-in-out infinite;
+    }
+
+    .hero-title,.section-title,.final-title{
+      font-family:'Cormorant Garamond',serif;
+      color:var(--purple2);
+      line-height:1.05;
+      letter-spacing:-.04em;
+    }
+
+    .hero-title{
+      font-size:clamp(2.5rem,6vw,4.8rem);
+      max-width:780px;
+      margin:0 auto 18px;
+    }
+
+    .section-title{
+      font-size:clamp(2rem,5vw,3rem);
+      margin-bottom:18px;
+      text-align:center;
+    }
+
+    .subtitle{
+      color:#fff;
+      font-size:1.02rem;
+      line-height:1.85;
+      max-width:720px;
+      margin:0 auto 24px;
+    }
+
+    .btn-row{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:14px 26px;
+      background:linear-gradient(135deg,#7c4dff,#9f7cff);
+      color:#fff;
+      font-weight:800;
+      font-size:1rem;
+      box-shadow:0 12px 28px rgba(0,0,0,.35), 0 0 18px rgba(156,124,255,.18);
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .btn:hover{transform:translateY(-2px) scale(1.02)}
+
+    .gold-line{
+      width:96px;
+      height:1px;
+      margin:0 auto 20px;
+      background:linear-gradient(90deg,transparent,var(--purple),transparent);
+    }
+
+    .letter-shell{
+      width:min(760px,100%);
+      margin:0 auto;
+      text-align:left;
+      background:rgba(255,255,255,.02);
+      border:1px solid rgba(156,124,255,.08);
+      border-radius:24px;
+      padding:22px 18px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+    }
+
+    .letter-text{
+      min-height:260px;
+      max-height:48vh;
+      overflow-y:auto;
+      padding-right:6px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.24rem;
+      line-height:1.62;
+      color:#fff;
+      scrollbar-width:thin;
+      scrollbar-color: rgba(156,124,255,.55) rgba(255,255,255,.04);
+    }
+
+    .letter-text::-webkit-scrollbar{width:8px}
+    .letter-text::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:999px}
+    .letter-text::-webkit-scrollbar-thumb{background:rgba(156,124,255,.55);border-radius:999px}
+    .letter-text p{margin:0 0 12px}
+
+    .reveal-btn{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:none;
+      cursor:pointer;
+      padding:14px 22px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#7c4dff,#9f7cff);
+      color:#fff;
+      font-weight:800;
+      font-size:1rem;
+      animation:pulse 1.3s infinite;
+      margin:18px auto 0;
+      box-shadow:0 12px 28px rgba(0,0,0,.35), 0 0 20px rgba(156,124,255,.18);
+    }
+    .reveal-btn.show{display:inline-flex}
+    .heart-mini{animation:blink .9s infinite}
+
+    .photos{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:18px;
+      margin:20px 0 18px;
+      flex-wrap:nowrap;
+    }
+
+    .photo{
+      width:220px;
+      height:290px;
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid rgba(156,124,255,.28);
+      box-shadow:0 18px 34px rgba(0,0,0,.35), 0 0 18px rgba(156,124,255,.08);
+      background:#111;
+      flex:0 0 auto;
+    }
+    .photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .heart-wrap{
+      width:72px;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 72px;
+    }
+    .heart-icon{
+      font-size:3.2rem;
+      color:#ff335c;
+      text-shadow:0 0 20px rgba(255,51,92,.32);
+      animation:heartBeat 1.35s infinite;
+      line-height:1;
+    }
+
+    .message{
+      max-width:760px;
+      margin:0 auto;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.18rem;
+      line-height:1.72;
+      color:#fff;
+    }
+
+    .signature{
+      margin-top:18px;
+      text-align:center;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,6vw,3rem);
+      color:var(--purple);
+    }
+
+    .slide-indicator{
+      margin-top:16px;
+      font-size:.9rem;
+      color:#d8d0ff;
+      opacity:.9;
+    }
+
+    .cinema-overlay{
+      z-index:10;
+      display:none;
+      overflow:hidden;
+    }
+    .cinema-overlay.show{display:block}
+    .cinema-top,.cinema-bottom{
+      position:absolute;
+      left:0;
+      width:100%;
+      height:0;
+      background:rgba(0,0,0,.94);
+      transition:height .8s ease;
+    }
+    .cinema-top{top:0}
+    .cinema-bottom{bottom:0}
+    .cinema-text{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:0 24px;
+      color:rgba(255,255,255,0);
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,6vw,4rem);
+      letter-spacing:-.04em;
+      transition:color .25s ease;
+    }
+    .cinema-overlay.show .cinema-top,
+    .cinema-overlay.show .cinema-bottom{height:50%}
+    .cinema-overlay.show .cinema-text{color:#ffffff}
+
+    @keyframes twinkle{0%,100%{opacity:.18;transform:scale(1)}50%{opacity:1;transform:scale(1.7)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+    @keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+    @keyframes nameGlow{0%,100%{text-shadow:0 0 16px rgba(156,124,255,.35),0 0 34px rgba(156,124,255,.18)}50%{text-shadow:0 0 18px rgba(156,124,255,.7),0 0 42px rgba(156,124,255,.35)}}
+    @keyframes floatDust{0%{transform:translateY(20px) scale(.8);opacity:0}20%{opacity:1}100%{transform:translateY(-60px) scale(1.2);opacity:0}}
+
+    @media (max-width:700px){
+      body{overflow-y:auto}
+      .app{align-items:flex-start;padding:14px}
+      .card{padding:26px 18px;min-height:auto}
+      .hero-title{font-size:clamp(2.2rem,10vw,3.4rem)}
+      .section-title{font-size:clamp(1.9rem,9vw,2.5rem)}
+      .subtitle{font-size:.98rem;line-height:1.75}
+      .letter-shell{padding:16px 12px}
+      .letter-text{font-size:1.05rem;line-height:1.58;max-height:44vh}
+      .photos{gap:10px;align-items:center}
+      .photo{width:39vw;height:54vw;min-width:132px;min-height:180px}
+      .heart-wrap{width:52px;height:52px;flex-basis:52px}
+      .heart-icon{font-size:2.2rem}
+      .message{font-size:1.02rem;line-height:1.66}
+      .btn,.reveal-btn{width:100%}
+      .slide-indicator{margin-top:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="magic-dust" id="magicDust"></div>
+  <div class="cinema-overlay" id="cinemaOverlay">
+    <div class="cinema-top"></div>
+    <div class="cinema-bottom"></div>
+    <div class="cinema-text" id="cinemaText">um momento mágico está começando…</div>
+  </div>
+
+  <div class="app">
+    <div class="slider">
+      <section class="slide active" id="slide1">
+        <div class="card">
+          <div class="badge">16 DE MARÇO DE 2026 • 17 ANOS</div>
+          <div class="name">Nayara</div>
+          <h1 class="hero-title">Hoje não é só um aniversário.<br>É o dia em que o mundo ganhou você.</h1>
+          <p class="subtitle">Eu queria fazer algo que parecesse eterno. Não um site comum, não uma página qualquer, mas um lugar que parecesse feito com cuidado de verdade.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="goToLetter()">Ler sua carta</button>
+          </div>
+          <div class="slide-indicator">Parte 1 de 3</div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide2">
+        <div class="card">
+          <h2 class="section-title">Uma carta para o seu dia</h2>
+          <div class="gold-line"></div>
+          <div class="letter-shell">
+            <div class="letter-text" id="letterText"></div>
+          </div>
+          <button class="reveal-btn" id="revealBtn" onclick="goToFinal()"><span class="heart-mini">❤</span> Aperte aqui <span class="heart-mini">❤</span></button>
+          <div class="slide-indicator">Parte 2 de 3</div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide3">
+        <div class="card">
+          <h2 class="section-title">Tem mais uma coisinha pra você...</h2>
+          <p class="message" style="margin-bottom:8px">Porque só a carta ainda não era o bastante para mostrar o quanto você é importante pra mim.</p>
+          <div class="photos">
+            <div class="photo"><img src="imagens/eu.jpg" alt="Minha foto"></div>
+            <div class="heart-wrap"><div class="heart-icon">❤</div></div>
+            <div class="photo"><img src="imagens/nayara1.jpg" alt="Foto da Nayara"></div>
+          </div>
+          <p class="message">Eu amo muito você, Nayara. Amo o seu jeito, amo até os seus ciúmes, amo o seu jeitinho chatinha, amo cada detalhe que faz você ser você. E se hoje é o seu dia, então eu só queria deixar registrado que ter você na minha vida faz tudo ficar mais bonito, mais leve e mais especial.</p>
+          <div class="signature">Thiago — mais conhecido como seu Homem</div>
+          <div class="slide-indicator">Parte 3 de 3</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for(let i=0;i<60;i++){
+      const s=document.createElement('div');
+      s.className='star';
+      s.style.left=Math.random()*100+'vw';
+      s.style.top=Math.random()*100+'vh';
+      s.style.animationDuration=(1+Math.random()*2)+'s';
+      starsEl.appendChild(s);
+    }
+
+    const dustEl = document.getElementById('magicDust');
+    function createDust(){
+      const d=document.createElement('div');
+      d.className='dust';
+      d.style.left=(15+Math.random()*70)+'vw';
+      d.style.top=(30+Math.random()*50)+'vh';
+      d.style.animationDuration=(2.5+Math.random()*2.5)+'s';
+      dustEl.appendChild(d);
+      setTimeout(()=>d.remove(), 5200);
+    }
+    setInterval(createDust, 380);
+
+    const slides = [
+      document.getElementById('slide1'),
+      document.getElementById('slide2'),
+      document.getElementById('slide3')
+    ];
+    const cinemaOverlay = document.getElementById('cinemaOverlay');
+    const cinemaText = document.getElementById('cinemaText');
+
+    function showSlide(index){
+      slides.forEach((slide,i)=>slide.classList.toggle('active', i===index));
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function cinematic(text, cb){
+      cinemaText.textContent = text;
+      cinemaOverlay.classList.add('show');
+      setTimeout(()=>{
+        cb();
+        setTimeout(()=>cinemaOverlay.classList.remove('show'), 220);
+      }, 900);
+    }
+
+    const lines = [
+      'Nayara,',
+      '',
+      'hoje é o seu dia... e eu fiquei pensando muito em como começar essa carta.',
+      '',
+      'Porque às vezes “feliz aniversário” parece pequeno demais para uma pessoa como você.',
+      '',
+      'Você não é só alguém que está fazendo aniversário hoje.',
+      'Você é alguém que mudou coisas dentro de mim.',
+      '',
+      'Eu amo muitas coisas em você.',
+      'Amo o seu sorriso.',
+      'Amo o seu jeito.',
+      'Amo quando você fala.',
+      'Amo quando você ri.',
+      '',
+      'Eu amo até quando você fica com ciúmes.',
+      '',
+      'Porque esse seu jeitinho, até quando você fica chatinha às vezes, mostra o quanto você se importa.',
+      '',
+      'E são exatamente essas pequenas coisas que fazem você ser tão especial.',
+      '',
+      'Então hoje eu só queria que você lembrasse de algo simples:',
+      '',
+      'Você é uma das pessoas mais incríveis que já apareceu na minha vida.',
+      '',
+      'Feliz aniversário, Nayara.'
+    ];
+
+    let started = false;
+
+    function startLetter(){
+      if(started) return;
+      started = true;
+      const letterText = document.getElementById('letterText');
+      let i = 0;
+      function next(){
+        if(i >= lines.length){
+          document.getElementById('revealBtn').classList.add('show');
+          return;
+        }
+        const p = document.createElement('p');
+        p.textContent = lines[i] === '' ? '\u00A0' : lines[i];
+        letterText.appendChild(p);
+        i++;
+        setTimeout(next, 150);
+      }
+      next();
+    }
+
+    function goToLetter(){
+      cinematic('a sua carta está chegando…', ()=>{
+        showSlide(1);
+        setTimeout(startLetter, 180);
+      });
+    }
+
+    function goToFinal(){
+      cinematic('o momento mais bonito ainda está por vir…', ()=>{
+        showSlide(2);
+      });
+    }
+  </script>
+</body>
+</html>
